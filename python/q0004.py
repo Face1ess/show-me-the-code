@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-def wordCount(filepath):
+def wordCount(filepath,output):
     try : 
         f = open(filepath)
         sentences = f.read()
@@ -17,12 +17,28 @@ def wordCount(filepath):
         for i in textFilter : 
             sentences = sentences.replace(i,textFilter[i]) 
         words = sentences.split(' ')
+    except Exception,e :
+        print e 
+           
+    outputType = ['count','countDict'] 
+    if output not in outputType :
+       print 'Usage: wordCount(filepath,[count|countDict])'
+    elif output == 'count':
         count = len(words)
         return count
-    except Exception,e:
-        print e
+    elif output == 'countDict':
+        countDict = {}
+        for i in words :
+            if i not in countDict :
+                countDict[i] = 1
+            else : 
+                countDict[i] = countDict[i] + 1
+        return countDict
 
 if __name__ == '__main__':
     filepath = 'test.txt'
-    count = wordCount(filepath)
-    print 'The file has '+str(count)+' words.'
+    count = wordCount(filepath,'count')
+    print count
+#    countDict = wordCount(filepath,'countDict')
+#    for i in countDict :
+#        print i+' : '+str(countDict[i])
