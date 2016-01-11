@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import Image
+import re
 
 def archivePic(picPath):
     try :
