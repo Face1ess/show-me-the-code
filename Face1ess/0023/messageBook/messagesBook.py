@@ -6,6 +6,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
 from contextlib import closing
+import time
 
 # configuration
 DATABASE = '/tmp/messagesBook.db'
@@ -38,17 +39,15 @@ def teardown_request(exception):
 
 @app.route('/')
 def show_messages():
-    cur = g.db.execute('select name, text from messages order by id desc')
-    messages = [dict(name=row[0],text=row[1]) for row in cur.fetchall()] 
+    cur = g.db.execute('select name, text, addTime from messages order by id desc')
+    messages = [dict(name=row[0],text=row[1],addTime=row[2]) for row in cur.fetchall()] 
     return render_template('show_messages.html',messages = messages)
 
 @app.route('/add',methods=['POST'])
 def add_message():
-    if not session.get('logged_in'):
-        abort(401)
-    g.db.execute('insert into messages (name,text) values(?,?)',[request.form['name'],request.form['text']])
+    g.db.execute('insert into messages (name,text,addTime) values(?,?,?)',[request.form['name'],request.form['text'],time.strftime('%Y-%m-%d %H:%M:%S')])
     g.db.commit()
-    flash('留言成功')
+    flash('yeah!')
     return redirect(url_for('show_messages'))
 
 if __name__ == '__main__':

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+    <p>请尽情留言</p>
+    <form action="{{ url_for('add_message') }}" method=post class=add-message>
+        <dl>
+           <dt>姓名
+           <dd><input type=text size=30 name=name >
+           <dt>内容
+           <dd><textarea name=text row=5 col=40></textarea>
+           <dd><input type=submit value=提交>
+        </dl>
+    </form>
+    <ul class=messages>
+    <h2>留言历史信息</h2>
+    {% for msg in messages %}
+        <li><h3>  {{ msg.name }} 留言于 {{ msg.addTime }} </h3></li>{{ msg.text|safe }}
+    {% else %}
+        <li><em>没有留言信息</em></li>    
+    </ul>
+    {% endfor %}
+{% endblock %}
